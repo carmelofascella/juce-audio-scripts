@@ -15,13 +15,18 @@ GainsliderAudioProcessorEditor::GainsliderAudioProcessorEditor (GainsliderAudioP
 {
 
     setSize (200, 400);
+    //sliderAttach = new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.treeState, GAIN_ID, gainSlider);
+    
     
     addAndMakeVisible(gainSlider);
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    gainSlider.setRange(-40.0, 0.0);
-    gainSlider.setValue(-1.0);
-    gainSlider.addListener(this);
+    //gainSlider.setRange(-40.0, 0.0);
+    //gainSlider.setValue(-1.0);
+    //gainSlider.addListener(this);
+    gainSliderAttachment.reset(
+        new juce::AudioProcessorValueTreeState::SliderAttachment(
+            audioProcessor.treeState, GAIN_ID, gainSlider));
 }
 
 GainsliderAudioProcessorEditor::~GainsliderAudioProcessorEditor()
@@ -37,8 +42,7 @@ void GainsliderAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GainsliderAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    gainSlider.setBounds(getLocalBounds());
 }
 
 void GainsliderAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)

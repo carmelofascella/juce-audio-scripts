@@ -19,9 +19,23 @@ GainsliderAudioProcessor::GainsliderAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+treeState(*this,
+          nullptr,
+          juce::Identifier("GainSliderPlugin"),
+          {std::make_unique<juce::AudioParameterFloat>(GAIN_ID,
+                                                       GAIN_NAME,
+                                                       juce::Range<float>{-40.f, 1.0f},
+                                                       0.0f)
+            })
+
 #endif
 {
+    gainSliderParameter = treeState.getRawParameterValue(GAIN_ID);
+    //juce::AudioProcessorValueTreeState
+    //juce::NormalisableRange<float> gainRange (0.0f, 1.0f);
+    //treeState.createAndAddParameter(GAIN_ID, GAIN_NAME, GAIN_NAME, gainRange, 0.5f, nullptr, //nullptr);
+
 }
 
 GainsliderAudioProcessor::~GainsliderAudioProcessor()
@@ -151,7 +165,11 @@ void GainsliderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         
         for(int sample=0; sample < buffer.getNumSamples(); ++sample)
         {
-            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
+            // in C++, std::atomic<T> to T conversion is equivalent to a load.
+            //conversion from dB value to linear value.
+            const auto gainParameter = pow( 10, gainSliderParameter->load() / 20);
+                
+            channelData[sample] = buffer.getSample(channel, sample) * gainParameter;
         }
     }
 }
@@ -187,6 +205,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new GainsliderAudioProcessor();
 }
+
 
 
 

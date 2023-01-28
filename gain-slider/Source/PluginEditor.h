@@ -25,6 +25,8 @@ public:
     void resized() override;
     
     void sliderValueChanged(juce::Slider* slider) override;
+    
+    juce::AudioProcessorValueTreeState::SliderAttachment* sliderAttach;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -32,6 +34,10 @@ private:
     GainsliderAudioProcessor& audioProcessor;
     
     juce::Slider gainSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+        gainSliderAttachment;
+    
+    juce::Label gainLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainsliderAudioProcessorEditor)
 };

@@ -10,6 +10,9 @@
 
 #include <JuceHeader.h>
 
+#define GAIN_ID "gain"
+#define GAIN_NAME "Gain"
+
 //==============================================================================
 /**
 */
@@ -58,6 +61,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     double rawVolume;
+    
+    //static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::AudioProcessorValueTreeState treeState;
+    std::atomic<float>* gainSliderParameter = nullptr;
 
 private:
     
