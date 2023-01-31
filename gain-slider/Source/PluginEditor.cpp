@@ -36,6 +36,7 @@ GainsliderAudioProcessorEditor::~GainsliderAudioProcessorEditor()
 //==============================================================================
 void GainsliderAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    g.fillAll(juce::Colours::black);
     gainSlider.setBounds(getLocalBounds());
     
 }
